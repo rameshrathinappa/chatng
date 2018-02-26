@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ChatService, Message } from '../chat.service';
 import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/scan';
 
 
@@ -14,6 +15,8 @@ export class ChatDialogComponent implements OnInit {
   messages: Observable<Message[]>;
   formValue: string;
 
+  @ViewChild('msgPanel') msgPanel: ElementRef;
+
   constructor(public chat: ChatService) { }
 
   ngOnInit() {
@@ -23,8 +26,11 @@ export class ChatDialogComponent implements OnInit {
   }
 
   sendMessage() {
-    this.chat.converse(this.formValue);
-    this.formValue = '';
+    if(this.formValue) {
+      this.chat.converse(this.formValue);      
+      this.formValue = '';
+      window.scrollTo(0,document.body.scrollHeight);
+    }
   }
 
 }

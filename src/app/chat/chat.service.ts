@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { HttpClient } from '@angular/common/http';
 
 // Message class for displaying messages in the component
 export class Message {
@@ -19,7 +20,7 @@ export class ChatService {
 
   conversation = new BehaviorSubject<Message[]>([]);
 
-  constructor() {}
+  constructor(public httpClient: HttpClient) {}
 
   // Sends and receives messages via DialogFlow
   converse(msg: string) {
@@ -33,6 +34,10 @@ export class ChatService {
                   this.update(botMessage);
                });
                */
+    this.httpClient.get('http://localhost:3000/getMessage').subscribe((res)=>{
+      const botMessage = new Message(res['response'], 'bot');
+      this.update(botMessage);
+    });
   }
 
 
